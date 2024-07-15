@@ -1,0 +1,43 @@
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import OneHotEncoder
+
+# Selecionar as novas variáveis relevantes
+additional_features = ['Released_Year', 'Runtime', 'Meta_score', 'Gross', 'No_of_Votes']
+categorical_features = ['Certificate', 'Genre', 'Director', 'Star1', 'Star2', 'Star3', 'Star4']
+
+# Preparar os dados, incluindo as novas características
+X = df[['Released_Year', 'Runtime', 'Meta_score', 'Gross', 'No_of_Votes', 'Overview', 'Certificate', 'Genre', 'Director', 'Star1', 'Star2', 'Star3', 'Star4']]
+y = df['IMDB_Rating']
+
+# Dividir os dados em treino e teste
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Pré-processamento para características adicionais, categóricas e texto
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', 'passthrough', additional_features),
+        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features),
+        ('tfidf', TfidfVectorizer(stop_words='english'), 'Overview')
+    ]
+)
+
+# Construir um pipeline de pré-processamento e modelo
+pipeline_combined = Pipeline([
+    ('preprocessor', preprocessor),
+    ('clf', RandomForestRegressor(n_estimators=100, random_state=42))
+])
+
+# Treinar o modelo
+pipeline_combined.fit(X_train, y_train)
+
+# Avaliar o modelo
+y_pred = pipeline_combined.predict(X_test)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+r2 = r2_score(y_test, y_pred)
+
+print(f'RMSE: {rmse}')
+print(f'R²: {r2}')
