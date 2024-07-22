@@ -16,9 +16,9 @@ Você foi alocado em um time da Indicium e deve:
 
 Este repositório contém:
 
-- **Relatório de Análise EDA**: [Link para PDF/Jupyter Notebook](link_para_o_arquivo).
-- **Modelagem de Machine Learning**: [Link para código Python](link_para_o_arquivo).
-- **Modelo Treinado**: Arquivo `imdb_rating_prediction.pkl`.
+- **Relatório de Análise EDA**.
+- **Modelagem de Machine Learning**.
+- **Modelo Treinado**: Arquivo `modelo_imdb_rating.pkl`.
 
 ## Requisitos
 
